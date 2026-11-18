@@ -1,0 +1,32 @@
+[package]
+name = "iq-files"
+version = "0.1.0"
+edition = "2021"
+authors = ["Terry Joel Casani Valencia"]
+description = "High-performance reading and writing of I/Q complex signal files in various SDR formats (SC16 Q11, SC16 Full, Float32, Int8, WAV, CSV)"
+license = "GPL-3.0-or-later"
+repository = "https://github.com/tcasaniv/iq-files"
+homepage = "https://github.com/tcasaniv/iq-files"
+documentation = "https://docs.rs/iq-files"
+readme = "README.md"
+keywords = ["sdr", "iq", "radio", "dsp", "signal"]
+categories = ["multimedia::encoding", "science"]
+
+[lib]
+name = "iq_files"
+crate-type = ["rlib", "cdylib"]
+
+[dependencies]
+hound = "3.5"
+serde = { version = "1.0", features = ["derive"], optional = true }
+
+[features]
+default = []
+serde = ["dep:serde"]
+
+[dev-dependencies]
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1

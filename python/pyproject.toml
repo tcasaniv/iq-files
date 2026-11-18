@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "iq-files"
+version = "0.1.0"
+authors = [
+  { name="Terry Joel Casani Valencia" },
+]
+description = "Fast, lightweight I/Q complex signal file reading and writing for SDR in Python (bladeRF, HackRF, GNU Radio, WAV, CSV)"
+readme = "README.md"
+license = { text = "GPL-3.0-or-later" }
+requires-python = ">=3.8"
+dependencies = [
+    "numpy>=1.20",
+    "scipy>=1.7",
+]
+keywords = ["sdr", "iq", "dsp", "radio", "signal", "bladerf", "hackrf", "gnuradio"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/tcasaniv/iq-files"
+"Bug Tracker" = "https://github.com/tcasaniv/iq-files/issues"
