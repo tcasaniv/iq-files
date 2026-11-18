@@ -14,18 +14,43 @@ pub mod save_sc16q11;
 pub mod save_wav_iq;
 pub mod save_wav_mono;
 
-pub use load_csv_iq::{load_csv_iq, load_csv_iq_from_str};
-pub use load_grcomplex::{load_grcomplex, load_grcomplex_from_memory};
-pub use load_int8::{load_int8, load_int8_from_memory};
-pub use load_sc16full::{load_sc16full, load_sc16full_from_memory};
-pub use load_sc16q11::{load_sc16q11, load_sc16q11_from_memory};
-pub use load_wav_iq::{load_wav_iq, load_wav_iq_from_memory};
-pub use load_wav_mono::{load_wav_mono, load_wav_mono_from_memory};
+// Nuevos formatos de la taxonomía completa
+pub mod load_cu8;
+pub mod save_cu8;
 
-pub use save_csv_iq::{save_csv_iq, save_csv_iq_to_string};
-pub use save_grcomplex::{save_grcomplex, save_grcomplex_to_memory};
-pub use save_int8::{save_int8, save_int8_to_memory};
-pub use save_sc16full::{save_sc16full, save_sc16full_to_memory};
-pub use save_sc16q11::{save_sc16q11, save_sc16q11_to_memory};
-pub use save_wav_iq::{save_wav_iq, save_wav_iq_to_memory};
-pub use save_wav_mono::{save_wav_mono, save_wav_mono_to_memory};
+pub mod load_cu16;
+pub mod load_cs12;
+pub mod load_cs24;
+pub mod load_cs32;
+pub mod load_cf16;
+pub mod load_cf64;
+pub mod load_sigmf;
+pub mod load_wav_rf64;
+
+pub use load_csv_iq::*;
+pub use load_grcomplex::*;
+pub use load_int8::*;
+pub use load_sc16full::*;
+pub use load_sc16q11::*;
+pub use load_wav_iq::*;
+pub use load_wav_mono::*;
+
+pub use save_csv_iq::*;
+pub use save_grcomplex::*;
+pub use save_int8::*;
+pub use save_sc16full::*;
+pub use save_sc16q11::*;
+pub use save_wav_iq::*;
+pub use save_wav_mono::*;
+
+pub use load_cu8::*;
+pub use save_cu8::*;
+
+pub use load_cu16::*;
+pub use load_cs12::*;
+pub use load_cs24::*;
+pub use load_cs32::*;
+pub use load_cf16::*;
+pub use load_cf64::*;
+pub use load_sigmf::*;
+pub use load_wav_rf64::*;

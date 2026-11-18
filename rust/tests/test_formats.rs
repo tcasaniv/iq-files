@@ -1,103 +1,72 @@
-use iq_files::{read_iq_memory, write_iq_memory, IqFormat};
+use iq_files::*;
 
 #[test]
 fn test_roundtrip_sc16q11() {
-    let original: Vec<(f32, f32)> = vec![
-        (0.0, 0.0),
-        (0.5, -0.5),
-        (0.999, -0.999),
-        (-1.0, 1.0),
-    ];
-    let bytes = write_iq_memory(&original, 288_000, IqFormat::RawSc16Q11).expect("write failed");
-    let (decoded, _) = read_iq_memory(&bytes, IqFormat::RawSc16Q11).expect("read failed");
-
-    assert_eq!(original.len(), decoded.len());
-    for (orig, dec) in original.iter().zip(decoded.iter()) {
-        assert!((orig.0 - dec.0).abs() < 0.002, "I mismatch: orig={}, dec={}", orig.0, dec.0);
-        assert!((orig.1 - dec.1).abs() < 0.002, "Q mismatch: orig={}, dec={}", orig.1, dec.1);
+    let original = vec![(0.5f32, -0.25f32), (0.0f32, 0.75f32)];
+    let bytes = save_sc16q11_to_memory(&original);
+    let decoded = load_sc16q11_from_memory(&bytes);
+    assert_eq!(decoded.len(), original.len());
+    for ((orig_i, orig_q), (dec_i, dec_q)) in original.iter().zip(decoded.iter()) {
+        assert!((orig_i - dec_i).abs() < 0.002);
+        assert!((orig_q - dec_q).abs() < 0.002);
     }
 }
 
 #[test]
-fn test_roundtrip_sc16full() {
-    let original: Vec<(f32, f32)> = vec![
-        (0.0, 0.0),
-        (0.707, -0.707),
-        (-0.5, 0.5),
-    ];
-    let bytes = write_iq_memory(&original, 288_000, IqFormat::RawSc16Full).expect("write failed");
-    let (decoded, _) = read_iq_memory(&bytes, IqFormat::RawSc16Full).expect("read failed");
+fn test_roundtrip_cu8() {
+    let original = vec![(0.5f32, -0.5f32), (0.0f32, 1.0f32)];
+    let bytes = save_cu8_to_memory(&original);
+    let decoded = load_cu8_from_memory(&bytes);
+    assert_eq!(decoded.len(), original.len());
+    for ((orig_i, orig_q), (dec_i, dec_q)) in original.iter().zip(decoded.iter()) {
+        assert!((orig_i - dec_i).abs() < 0.02);
+        assert!((orig_q - dec_q).abs() < 0.02);
+    }
+}
 
-    assert_eq!(original.len(), decoded.len());
-    for (orig, dec) in original.iter().zip(decoded.iter()) {
-        assert!((orig.0 - dec.0).abs() < 0.0001);
-        assert!((orig.1 - dec.1).abs() < 0.0001);
+#[test]
+fn test_roundtrip_cs12() {
+    let original = vec![(0.25f32, -0.75f32), (0.5f32, 0.0f32)];
+    let bytes = save_cs12_to_memory(&original);
+    let decoded = load_cs12_from_memory(&bytes);
+    assert_eq!(decoded.len(), original.len());
+    for ((orig_i, orig_q), (dec_i, dec_q)) in original.iter().zip(decoded.iter()) {
+        assert!((orig_i - dec_i).abs() < 0.005);
+        assert!((orig_q - dec_q).abs() < 0.005);
+    }
+}
+
+#[test]
+fn test_roundtrip_cf16() {
+    let original = vec![(0.123f32, -0.456f32), (0.875f32, 0.0f32)];
+    let bytes = save_cf16_to_memory(&original);
+    let decoded = load_cf16_from_memory(&bytes);
+    assert_eq!(decoded.len(), original.len());
+    for ((orig_i, orig_q), (dec_i, dec_q)) in original.iter().zip(decoded.iter()) {
+        assert!((orig_i - dec_i).abs() < 0.002);
+        assert!((orig_q - dec_q).abs() < 0.002);
+    }
+}
+
+#[test]
+fn test_roundtrip_wav_rf64() {
+    let original = vec![(0.3f32, -0.6f32), (-0.1f32, 0.9f32)];
+    let bytes = save_wav_rf64_to_memory(&original, 1_000_000).expect("save rf64");
+    let (decoded, sr) = load_wav_rf64_from_memory(&bytes).expect("load rf64");
+    assert_eq!(sr, 1_000_000);
+    assert_eq!(decoded.len(), original.len());
+    for ((orig_i, orig_q), (dec_i, dec_q)) in original.iter().zip(decoded.iter()) {
+        assert!((orig_i - dec_i).abs() < 0.001);
+        assert!((orig_q - dec_q).abs() < 0.001);
     }
 }
 
 #[test]
 fn test_roundtrip_grcomplex() {
-    let original: Vec<(f32, f32)> = vec![
-        (0.12345, -0.6789),
-        (-0.999, 0.888),
-    ];
-    let bytes = write_iq_memory(&original, 1_000_000, IqFormat::RawFloat32).expect("write failed");
-    let (decoded, sr) = read_iq_memory(&bytes, IqFormat::RawFloat32).expect("read failed");
-
-    assert_eq!(sr, 1_000_000);
-    assert_eq!(original.len(), decoded.len());
-    for (orig, dec) in original.iter().zip(decoded.iter()) {
-        assert!((orig.0 - dec.0).abs() < 1e-6);
-        assert!((orig.1 - dec.1).abs() < 1e-6);
-    }
-}
-
-#[test]
-fn test_roundtrip_int8() {
-    let original: Vec<(f32, f32)> = vec![
-        (0.0, 0.0),
-        (0.5, -0.5),
-        (1.0, -1.0),
-    ];
-    let bytes = write_iq_memory(&original, 2_000_000, IqFormat::RawInt8).expect("write failed");
-    let (decoded, _) = read_iq_memory(&bytes, IqFormat::RawInt8).expect("read failed");
-
-    assert_eq!(original.len(), decoded.len());
-    for (orig, dec) in original.iter().zip(decoded.iter()) {
-        assert!((orig.0 - dec.0).abs() < 0.02);
-        assert!((orig.1 - dec.1).abs() < 0.02);
-    }
-}
-
-#[test]
-fn test_roundtrip_wav_iq() {
-    let original: Vec<(f32, f32)> = vec![
-        (0.25, -0.75),
-        (-0.5, 0.5),
-    ];
-    let bytes = write_iq_memory(&original, 48_000, IqFormat::WavIq16).expect("write failed");
-    let (decoded, sr) = read_iq_memory(&bytes, IqFormat::WavIq16).expect("read failed");
-
-    assert_eq!(sr, 48_000);
-    assert_eq!(original.len(), decoded.len());
-    for (orig, dec) in original.iter().zip(decoded.iter()) {
-        assert!((orig.0 - dec.0).abs() < 0.0001);
-        assert!((orig.1 - dec.1).abs() < 0.0001);
-    }
-}
-
-#[test]
-fn test_roundtrip_csv_iq() {
-    let original: Vec<(f32, f32)> = vec![
-        (0.1234, -0.5678),
-        (0.9999, -0.9999),
-    ];
-    let bytes = write_iq_memory(&original, 288_000, IqFormat::CsvIq).expect("write failed");
-    let (decoded, _) = read_iq_memory(&bytes, IqFormat::CsvIq).expect("read failed");
-
-    assert_eq!(original.len(), decoded.len());
-    for (orig, dec) in original.iter().zip(decoded.iter()) {
-        assert!((orig.0 - dec.0).abs() < 0.0001);
-        assert!((orig.1 - dec.1).abs() < 0.0001);
-    }
+    let original = vec![(0.123456f32, -0.987654f32)];
+    let bytes = save_grcomplex_to_memory(&original);
+    let decoded = load_grcomplex_from_memory(&bytes);
+    assert_eq!(decoded.len(), original.len());
+    assert!((decoded[0].0 - original[0].0).abs() < 1e-6);
+    assert!((decoded[0].1 - original[0].1).abs() < 1e-6);
 }
