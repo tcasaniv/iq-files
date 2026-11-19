@@ -4,10 +4,6 @@
 //! - **Ecosistema**: Grabaciones continuas de muy larga duración o ancho de banda elevado en **SDR#**, **SDR Console v3** y **HDSDR** que superan el límite de 4 GB de la cabecera estándar RIFF de 32 bits.
 //! - **Especificación**: Estándar EBU Tech 3306 (RF64). Utiliza el FourCC `'RF64'` en lugar de `'RIFF'`, y define una tabla `'ds64'` con tamaños de archivo y de bloque de 64 bits.
 
-use std::fs::File;
-use std::io::{Read, Write};
-use std::path::Path;
-
 /// Lee muestras I/Q desde un archivo WAV RF64 o WAV tradicional compatible.
 pub fn load_wav_rf64_from_memory(bytes: &[u8]) -> Result<(Vec<(f32, f32)>, u32), Box<dyn std::error::Error>> {
     if bytes.len() < 36 {
