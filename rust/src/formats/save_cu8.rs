@@ -32,3 +32,10 @@ pub fn save_cu8_to_file(path: &Path, samples: &[(f32, f32)]) -> Result<(), std::
     file.write_all(&bytes)?;
     Ok(())
 }
+
+/// Guarda muestras I/Q en formato RAW CU8 a un archivo en disco.
+pub fn save_cu8(path: &Path, samples: &[(f32, f32)]) -> Result<(), std::io::Error> {
+    save_cu8_to_file(path, samples)
+}
+
+

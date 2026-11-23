@@ -36,3 +36,15 @@ Si no deseas agregar el crate completo como dependencia, puedes copiar cualquier
 - `load_int8.rs` / `save_int8.rs`: para HackRF y RTL-SDR.
 - `load_wav_iq.rs` / `save_wav_iq.rs`: para archivos WAV estéreo I/Q (SDR#, SDR++).
 - `load_csv_iq.rs` / `save_csv_iq.rs`: para archivos de texto plano CSV.
+
+---
+
+## Carpeta de Ejemplos
+
+Encuentra ejemplos de código en la carpeta [`examples/`](examples/):
+Para ejecutar la demostración completa de conversión y verificación:
+
+```bash
+cargo run --example basic_conversion
+```
+

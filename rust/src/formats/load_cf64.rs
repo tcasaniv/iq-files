@@ -8,7 +8,7 @@
 //!   - Rango nominal normalizado `[-1.0, 1.0]`.
 
 use std::fs::File;
-use std::io::{Read, Write};
+use std::io::Read;
 use std::path::Path;
 
 /// Lee muestras I/Q en formato RAW CF64 (double precision float64) desde memoria.
@@ -35,22 +35,8 @@ pub fn load_cf64_from_file(path: &Path) -> Result<Vec<(f32, f32)>, std::io::Erro
     Ok(load_cf64_from_memory(&bytes))
 }
 
-/// Codifica muestras I/Q a formato RAW CF64 (double precision float64).
-pub fn save_cf64_to_memory(samples: &[(f32, f32)]) -> Vec<u8> {
-    let mut bytes = Vec::with_capacity(samples.len() * 16);
-    for &(i, q) in samples {
-        let i_f64 = i as f64;
-        let q_f64 = q as f64;
-        bytes.extend_from_slice(&i_f64.to_le_bytes());
-        bytes.extend_from_slice(&q_f64.to_le_bytes());
-    }
-    bytes
+pub fn load_cf64(path: &Path) -> Result<Vec<(f32, f32)>, std::io::Error> {
+    load_cf64_from_file(path)
 }
 
-/// Guarda muestras I/Q en formato RAW CF64 a archivo.
-pub fn save_cf64_to_file(path: &Path, samples: &[(f32, f32)]) -> Result<(), std::io::Error> {
-    let bytes = save_cf64_to_memory(samples);
-    let mut file = File::create(path)?;
-    file.write_all(&bytes)?;
-    Ok(())
-}
+

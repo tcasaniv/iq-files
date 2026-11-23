@@ -3,11 +3,17 @@
 disp('Iniciando tests de iq-files MATLAB...');
 test_signal = [0.0, 0.5 - 0.5j, 0.99 - 0.99j, -0.7 + 0.3j];
 
-formats = {'sc16q11', 'sc16full', 'grcomplex', 'int8', 'wav_iq', 'csv_iq'};
+formats = {'sc16q11', 'sc16full', 'grcomplex', 'int8', 'cu8', 'cs12', 'wav_iq', 'csv_iq'};
 
 for i = 1:length(formats)
     fmt = formats{i};
-    fname = ['tmp_test_', fmt, '.tmp'];
+    ext = '.tmp';
+    if strcmp(fmt, 'wav_iq')
+        ext = '.wav';
+    elseif strcmp(fmt, 'csv_iq')
+        ext = '.csv';
+    end
+    fname = ['tmp_test_', fmt, ext];
 
     % Guardar
     iq_files('write', fname, test_signal, 48000, fmt);

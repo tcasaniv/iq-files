@@ -8,7 +8,7 @@
 //!   - Little-Endian.
 
 use std::fs::File;
-use std::io::{Read, Write};
+use std::io::Read;
 use std::path::Path;
 
 /// Lee muestras I/Q en formato RAW CS24 (int24 Little-Endian) desde memoria.
@@ -42,31 +42,8 @@ pub fn load_cs24_from_file(path: &Path) -> Result<Vec<(f32, f32)>, std::io::Erro
     Ok(load_cs24_from_memory(&bytes))
 }
 
-/// Codifica muestras I/Q a formato RAW CS24 (int24 Little-Endian).
-pub fn save_cs24_to_memory(samples: &[(f32, f32)]) -> Vec<u8> {
-    let mut bytes = Vec::with_capacity(samples.len() * 6);
-    for &(i, q) in samples {
-        let i_val = (i * 8_388_607.0).clamp(-8_388_608.0, 8_388_607.0).round() as i32;
-        let q_val = (q * 8_388_607.0).clamp(-8_388_608.0, 8_388_607.0).round() as i32;
-
-        let i_u24 = (i_val as u32) & 0x00FF_FFFF;
-        let q_u24 = (q_val as u32) & 0x00FF_FFFF;
-
-        bytes.push((i_u24 & 0xFF) as u8);
-        bytes.push(((i_u24 >> 8) & 0xFF) as u8);
-        bytes.push(((i_u24 >> 16) & 0xFF) as u8);
-
-        bytes.push((q_u24 & 0xFF) as u8);
-        bytes.push(((q_u24 >> 8) & 0xFF) as u8);
-        bytes.push(((q_u24 >> 16) & 0xFF) as u8);
-    }
-    bytes
+pub fn load_cs24(path: &Path) -> Result<Vec<(f32, f32)>, std::io::Error> {
+    load_cs24_from_file(path)
 }
 
-/// Guarda muestras I/Q en formato RAW CS24 a archivo.
-pub fn save_cs24_to_file(path: &Path, samples: &[(f32, f32)]) -> Result<(), std::io::Error> {
-    let bytes = save_cs24_to_memory(samples);
-    let mut file = File::create(path)?;
-    file.write_all(&bytes)?;
-    Ok(())
-}
+

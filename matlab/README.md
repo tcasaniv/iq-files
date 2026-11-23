@@ -12,6 +12,8 @@ Si únicamente necesitas trabajar con un formato específico (por ejemplo, gener
 - `load_grcomplex.m` / `save_grcomplex.m`: GNU Radio float32 complex (`complex64`).
 - `load_sc16full.m` / `save_sc16full.m`: int16 Little-Endian escala completa ($\pm 32768$).
 - `load_int8.m` / `save_int8.m`: HackRF / RTL-SDR signed 8-bit ($\pm 128$).
+- `load_cu8.m` / `save_cu8.m`: RTL-SDR unsigned 8-bit con cero en 127.5.
+- `load_cs12.m` / `save_cs12.m`: LimeSDR / bladeRF 12-bit packed (3 bytes por par).
 - `load_wav_iq.m` / `save_wav_iq.m`: WAV I/Q estéreo de 16 bits PCM.
 - `load_csv_iq.m` / `save_csv_iq.m`: Texto plano CSV con columnas I, Q.
 
@@ -26,6 +28,14 @@ iq_files('write', 'senial.bin', iq, 48000, 'sc16q11');
 % Leer señal
 [samples, fs] = iq_files('read', 'senial.bin', 'sc16q11');
 ```
+
+---
+
+## Carpeta de Ejemplos
+
+Encuentra scripts interactivos y listos para ejecutar en la carpeta [`examples/`](examples/):
+- `examples/example_basic_io.m`: Sintetiza un tono analítico puro, lo serializa en múltiples formatos (bladeRF, RTL-SDR, LimeSDR, WAV), lo lee de vuelta y verifica la precisión.
+
 
 ## Compatibilidad
 Compatible con **MATLAB R2016b o posterior** y **GNU Octave 6.0 o posterior**.

@@ -38,3 +38,10 @@ pub fn load_cu8_from_file(path: &Path) -> Result<Vec<(f32, f32)>, std::io::Error
     file.read_to_end(&mut bytes)?;
     Ok(load_cu8_from_memory(&bytes))
 }
+
+/// Lee muestras I/Q en formato RAW CU8 desde un archivo en disco.
+pub fn load_cu8(path: &Path) -> Result<Vec<(f32, f32)>, std::io::Error> {
+    load_cu8_from_file(path)
+}
+
+

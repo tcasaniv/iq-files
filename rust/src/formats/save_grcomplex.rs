@@ -20,3 +20,9 @@ pub fn save_grcomplex_to_memory(samples: &[(f32, f32)]) -> Vec<u8> {
     }
     buf
 }
+
+/// Alias explícito para guardado a archivo en disco.
+pub fn save_grcomplex_to_file(path: &Path, samples: &[(f32, f32)]) -> IoResult<()> {
+    save_grcomplex(path, samples)
+}
+

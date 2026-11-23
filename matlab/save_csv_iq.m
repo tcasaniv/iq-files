@@ -4,6 +4,6 @@ function [ret] = save_csv_iq(filename, signal)
 %   [RET] = save_csv_iq(FILENAME, SIGNAL)
 
     data = [real(signal(:)), imag(signal(:))];
-    writematrix(data, filename);
+    writematrix(data, filename, 'FileType', 'text');
     ret = 1;
 end

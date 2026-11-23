@@ -8,7 +8,7 @@
 //!   - Rango numérico: `[-2147483648, 2147483647]`.
 
 use std::fs::File;
-use std::io::{Read, Write};
+use std::io::Read;
 use std::path::Path;
 
 /// Lee muestras I/Q en formato RAW CS32 (int32 Little-Endian) desde memoria.
@@ -33,22 +33,8 @@ pub fn load_cs32_from_file(path: &Path) -> Result<Vec<(f32, f32)>, std::io::Erro
     Ok(load_cs32_from_memory(&bytes))
 }
 
-/// Codifica muestras I/Q a formato RAW CS32 (int32 Little-Endian).
-pub fn save_cs32_to_memory(samples: &[(f32, f32)]) -> Vec<u8> {
-    let mut bytes = Vec::with_capacity(samples.len() * 8);
-    for &(i, q) in samples {
-        let i_val = (i as f64 * 2_147_483_647.0).clamp(-2_147_483_648.0, 2_147_483_647.0).round() as i32;
-        let q_val = (q as f64 * 2_147_483_647.0).clamp(-2_147_483_648.0, 2_147_483_647.0).round() as i32;
-        bytes.extend_from_slice(&i_val.to_le_bytes());
-        bytes.extend_from_slice(&q_val.to_le_bytes());
-    }
-    bytes
+pub fn load_cs32(path: &Path) -> Result<Vec<(f32, f32)>, std::io::Error> {
+    load_cs32_from_file(path)
 }
 
-/// Guarda muestras I/Q en formato RAW CS32 a archivo.
-pub fn save_cs32_to_file(path: &Path, samples: &[(f32, f32)]) -> Result<(), std::io::Error> {
-    let bytes = save_cs32_to_memory(samples);
-    let mut file = File::create(path)?;
-    file.write_all(&bytes)?;
-    Ok(())
-}
+

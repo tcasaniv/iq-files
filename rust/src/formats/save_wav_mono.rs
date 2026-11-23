@@ -31,3 +31,9 @@ pub fn save_wav_mono_to_memory(samples: &[(f32, f32)], sample_rate: u32) -> Resu
     }
     Ok(buf)
 }
+
+/// Alias explícito para guardado a archivo en disco.
+pub fn save_wav_mono_to_file(path: &Path, samples: &[(f32, f32)], sample_rate: u32) -> Result<(), Box<dyn std::error::Error>> {
+    save_wav_mono(path, samples, sample_rate)
+}
+

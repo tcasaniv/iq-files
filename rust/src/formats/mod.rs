@@ -14,18 +14,33 @@ pub mod save_sc16q11;
 pub mod save_wav_iq;
 pub mod save_wav_mono;
 
-// Nuevos formatos de la taxonomía completa
+// Formatos extendidos con soporte bidireccional completo
 pub mod load_cu8;
 pub mod save_cu8;
 
 pub mod load_cu16;
+pub mod save_cu16;
+
 pub mod load_cs12;
+pub mod save_cs12;
+
 pub mod load_cs24;
+pub mod save_cs24;
+
 pub mod load_cs32;
+pub mod save_cs32;
+
 pub mod load_cf16;
+pub mod save_cf16;
+
 pub mod load_cf64;
+pub mod save_cf64;
+
 pub mod load_sigmf;
+pub mod save_sigmf;
+
 pub mod load_wav_rf64;
+pub mod save_wav_rf64;
 
 pub use load_csv_iq::*;
 pub use load_grcomplex::*;
@@ -47,10 +62,25 @@ pub use load_cu8::*;
 pub use save_cu8::*;
 
 pub use load_cu16::*;
+pub use save_cu16::*;
+
 pub use load_cs12::*;
+pub use save_cs12::*;
+
 pub use load_cs24::*;
+pub use save_cs24::*;
+
 pub use load_cs32::*;
+pub use save_cs32::*;
+
 pub use load_cf16::*;
+pub use save_cf16::*;
+
 pub use load_cf64::*;
+pub use save_cf64::*;
+
 pub use load_sigmf::*;
+pub use save_sigmf::*;
+
 pub use load_wav_rf64::*;
+pub use save_wav_rf64::*;

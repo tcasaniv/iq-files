@@ -8,7 +8,7 @@
 //!   - Rango nominal normalizado `[-1.0, 1.0]`.
 
 use std::fs::File;
-use std::io::{Read, Write};
+use std::io::Read;
 use std::path::Path;
 
 /// Convierte un u16 que representa un IEEE 754 binary16 (half precision) a f32.
@@ -49,7 +49,7 @@ fn half_to_f32(h: u16) -> f32 {
 }
 
 /// Convierte un f32 al formato IEEE 754 binary16 (half precision u16).
-fn f32_to_half(val: f32) -> u16 {
+pub fn f32_to_half(val: f32) -> u16 {
     let bits = val.to_bits();
     let sign = ((bits >> 31) & 1) as u16;
     let exp = ((bits >> 23) & 0xFF) as i32;
@@ -103,22 +103,8 @@ pub fn load_cf16_from_file(path: &Path) -> Result<Vec<(f32, f32)>, std::io::Erro
     Ok(load_cf16_from_memory(&bytes))
 }
 
-/// Codifica muestras I/Q a formato RAW CF16 (half-precision float16).
-pub fn save_cf16_to_memory(samples: &[(f32, f32)]) -> Vec<u8> {
-    let mut bytes = Vec::with_capacity(samples.len() * 4);
-    for &(i, q) in samples {
-        let i_h = f32_to_half(i);
-        let q_h = f32_to_half(q);
-        bytes.extend_from_slice(&i_h.to_le_bytes());
-        bytes.extend_from_slice(&q_h.to_le_bytes());
-    }
-    bytes
+pub fn load_cf16(path: &Path) -> Result<Vec<(f32, f32)>, std::io::Error> {
+    load_cf16_from_file(path)
 }
 
-/// Guarda muestras I/Q en formato RAW CF16 a archivo.
-pub fn save_cf16_to_file(path: &Path, samples: &[(f32, f32)]) -> Result<(), std::io::Error> {
-    let bytes = save_cf16_to_memory(samples);
-    let mut file = File::create(path)?;
-    file.write_all(&bytes)?;
-    Ok(())
-}
+

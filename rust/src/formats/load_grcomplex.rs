@@ -21,3 +21,9 @@ pub fn load_grcomplex_from_memory(bytes: &[u8]) -> Vec<(f32, f32)> {
     }
     samples
 }
+
+/// Alias explícito para lectura desde archivo en disco.
+pub fn load_grcomplex_from_file(path: &Path) -> IoResult<Vec<(f32, f32)>> {
+    load_grcomplex(path)
+}
+

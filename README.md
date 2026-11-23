@@ -12,9 +12,9 @@ Permite utilizar la biblioteca unificada completa a través de gestores de paque
 
 ## Ecosistemas y Lenguajes Soportados
 
-- **[`rust/`](rust/)**: Crate oficial para Rust ([`iq-files` en crates.io](https://crates.io/crates/iq-files)). Lectura/escritura de alto rendimiento, normalización de muestras y API unificada o funciones individuales `load_*` / `save_*`.
-- **[`python/`](python/)**: Paquete para Python ([`iq-files` en PyPI](https://pypi.org/project/iq-files/)), instalable vía `pip install iq-files`, desde GitHub, o mediante scripts autocontenidos en `standalone/`. Soporte completo con NumPy y SciPy.
-- **[`matlab/`](matlab/)**: Funciones independientes para MATLAB y GNU Octave (`load_sc16q11.m`, `save_sc16q11.m`, `load_cu8.m`, etc.) y función integradora `iq_files.m`.
+- **[`rust/`](rust/)**: Crate oficial para Rust ([`iq-files` en crates.io](https://crates.io/crates/iq-files)). Lectura/escritura de alto rendimiento, normalización de muestras y API unificada o funciones individuales `load_*` / `save_*`. Incluye ejemplos en [`rust/examples/`](rust/examples/).
+- **[`python/`](python/)**: Paquete para Python ([`iq-files` en PyPI](https://pypi.org/project/iq-files/)), instalable vía `pip install iq-files`, desde GitHub, o mediante scripts autocontenidos en `standalone/`. Soporte completo con NumPy y SciPy. Incluye ejemplos en [`python/examples/`](python/examples/).
+- **[`matlab/`](matlab/)**: Funciones independientes para MATLAB y GNU Octave (`load_sc16q11.m`, `save_sc16q11.m`, `load_cu8.m`, `load_cs12.m`, etc.) y función integradora `iq_files.m`. Incluye ejemplos en [`matlab/examples/`](matlab/examples/).
 
 ---
 

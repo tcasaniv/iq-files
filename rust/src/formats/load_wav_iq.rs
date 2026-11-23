@@ -33,3 +33,9 @@ pub fn load_wav_iq_from_memory(bytes: &[u8]) -> Result<(Vec<(f32, f32)>, u32), B
     }
     Ok((samples, sample_rate))
 }
+
+/// Alias explícito para lectura desde archivo en disco.
+pub fn load_wav_iq_from_file(path: &Path) -> Result<(Vec<(f32, f32)>, u32), Box<dyn std::error::Error>> {
+    load_wav_iq(path)
+}
+

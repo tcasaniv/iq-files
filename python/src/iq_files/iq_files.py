@@ -20,6 +20,10 @@ try:
     from .save_wav_iq import save_wav_iq
     from .load_csv_iq import load_csv_iq
     from .save_csv_iq import save_csv_iq
+    from .load_cf64 import load_cf64
+    from .save_cf64 import save_cf64
+    from .load_wav_mono import load_wav_mono
+    from .save_wav_mono import save_wav_mono
 except ImportError:
     from load_sc16q11 import load_sc16q11
     from save_sc16q11 import save_sc16q11
@@ -35,6 +39,10 @@ except ImportError:
     from save_wav_iq import save_wav_iq
     from load_csv_iq import load_csv_iq
     from save_csv_iq import save_csv_iq
+    from load_cf64 import load_cf64
+    from save_cf64 import save_cf64
+    from load_wav_mono import load_wav_mono
+    from save_wav_mono import save_wav_mono
 
 __all__ = [
     'read_iq',
@@ -55,6 +63,10 @@ __all__ = [
     'save_wav_iq',
     'load_csv_iq',
     'save_csv_iq',
+    'load_cf64',
+    'save_cf64',
+    'load_wav_mono',
+    'save_wav_mono',
 ]
 
 def read_iq(filename: str, format: str = 'sc16q11') -> Tuple[np.ndarray, int]:
@@ -80,8 +92,12 @@ def read_iq(filename: str, format: str = 'sc16q11') -> Tuple[np.ndarray, int]:
         return load_wav_iq(filename)
     elif fmt in ('csv_iq', 'csv'):
         return load_csv_iq(filename), 48000
+    elif fmt in ('cf64', 'float64'):
+        return load_cf64(filename), 1000000
+    elif fmt in ('wav_mono', 'mono'):
+        return load_wav_mono(filename)
     else:
-        raise ValueError(f"Formato desconocido '{format}'. Use: sc16q11, sc16full, grcomplex, int8, cu8, cs12, wav_iq, csv_iq")
+        raise ValueError(f"Formato desconocido '{format}'. Use: sc16q11, sc16full, grcomplex, int8, cu8, cs12, wav_iq, csv_iq, cf64, wav_mono")
 
 def write_iq(filename: str, signal: np.ndarray, sample_rate: int = 288000, format: str = 'sc16q11') -> bool:
     """
@@ -107,5 +123,9 @@ def write_iq(filename: str, signal: np.ndarray, sample_rate: int = 288000, forma
         return save_wav_iq(filename, signal, sample_rate)
     elif fmt in ('csv_iq', 'csv'):
         return save_csv_iq(filename, signal)
+    elif fmt in ('cf64', 'float64'):
+        return save_cf64(filename, signal)
+    elif fmt in ('wav_mono', 'mono'):
+        return save_wav_mono(filename, signal, sample_rate)
     else:
-        raise ValueError(f"Formato desconocido '{format}'. Use: sc16q11, sc16full, grcomplex, int8, cu8, cs12, wav_iq, csv_iq")
+        raise ValueError(f"Formato desconocido '{format}'. Use: sc16q11, sc16full, grcomplex, int8, cu8, cs12, wav_iq, csv_iq, cf64, wav_mono")

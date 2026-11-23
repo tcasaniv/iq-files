@@ -4,6 +4,10 @@
 //! - **Ecosistema**: Grabaciones continuas de muy larga duración o ancho de banda elevado en **SDR#**, **SDR Console v3** y **HDSDR** que superan el límite de 4 GB de la cabecera estándar RIFF de 32 bits.
 //! - **Especificación**: Estándar EBU Tech 3306 (RF64). Utiliza el FourCC `'RF64'` en lugar de `'RIFF'`, y define una tabla `'ds64'` con tamaños de archivo y de bloque de 64 bits.
 
+use std::fs::File;
+use std::io::Read;
+use std::path::Path;
+
 /// Lee muestras I/Q desde un archivo WAV RF64 o WAV tradicional compatible.
 pub fn load_wav_rf64_from_memory(bytes: &[u8]) -> Result<(Vec<(f32, f32)>, u32), Box<dyn std::error::Error>> {
     if bytes.len() < 36 {
@@ -84,52 +88,15 @@ pub fn load_wav_rf64_from_memory(bytes: &[u8]) -> Result<(Vec<(f32, f32)>, u32),
     Ok((samples, sample_rate))
 }
 
-/// Guarda muestras I/Q en un contenedor RF64 con chunk `ds64` para soporte de grabaciones arbitrariamente grandes.
-pub fn save_wav_rf64_to_memory(
-    samples: &[(f32, f32)],
-    sample_rate: u32,
-) -> Result<Vec<u8>, Box<dyn std::error::Error>> {
-    let data_bytes_len = (samples.len() * 4) as u64;
-    // ds64 chunk: 8 bytes id + 4 bytes size (28) + 8 RIFF size + 8 data size + 8 sample count + 4 table len = 36 bytes
-    // fmt chunk: 8 + 16 = 24 bytes
-    // data chunk: 8 + data_bytes_len
-    let total_file_size = 12 + 36 + 24 + 8 + data_bytes_len;
-
-    let mut out = Vec::new();
-    // Cabecera RF64
-    out.extend_from_slice(b"RF64");
-    out.extend_from_slice(&0xFFFF_FFFFu32.to_le_bytes()); // Marcador estándar indicando leer ds64
-    out.extend_from_slice(b"WAVE");
-
-    // Chunk 'ds64'
-    out.extend_from_slice(b"ds64");
-    out.extend_from_slice(&28u32.to_le_bytes()); // tamaño de ds64
-    out.extend_from_slice(&(total_file_size - 8).to_le_bytes()); // riffSize64
-    out.extend_from_slice(&data_bytes_len.to_le_bytes()); // dataSize64
-    out.extend_from_slice(&(samples.len() as u64).to_le_bytes()); // sampleCount64
-    out.extend_from_slice(&0u32.to_le_bytes()); // tableLength
-
-    // Chunk 'fmt '
-    out.extend_from_slice(b"fmt ");
-    out.extend_from_slice(&16u32.to_le_bytes());
-    out.extend_from_slice(&1u16.to_le_bytes()); // AudioFormat PCM = 1
-    out.extend_from_slice(&2u16.to_le_bytes()); // Channels = 2
-    out.extend_from_slice(&sample_rate.to_le_bytes());
-    let byte_rate = sample_rate * 4;
-    out.extend_from_slice(&byte_rate.to_le_bytes());
-    out.extend_from_slice(&4u16.to_le_bytes()); // BlockAlign = 4
-    out.extend_from_slice(&16u16.to_le_bytes()); // BitsPerSample = 16
-
-    // Chunk 'data'
-    out.extend_from_slice(b"data");
-    out.extend_from_slice(&0xFFFF_FFFFu32.to_le_bytes()); // Indicador estándar en RF64
-
-    for &(i, q) in samples {
-        let i_i16 = (i * 32767.0).clamp(-32768.0, 32767.0).round() as i16;
-        let q_i16 = (q * 32767.0).clamp(-32768.0, 32767.0).round() as i16;
-        out.extend_from_slice(&i_i16.to_le_bytes());
-        out.extend_from_slice(&q_i16.to_le_bytes());
-    }
-
-    Ok(out)
+pub fn load_wav_rf64_from_file(path: &Path) -> Result<(Vec<(f32, f32)>, u32), Box<dyn std::error::Error>> {
+    let mut file = File::open(path)?;
+    let mut buffer = Vec::new();
+    file.read_to_end(&mut buffer)?;
+    load_wav_rf64_from_memory(&buffer)
 }
+
+pub fn load_wav_rf64(path: &Path) -> Result<(Vec<(f32, f32)>, u32), Box<dyn std::error::Error>> {
+    load_wav_rf64_from_file(path)
+}
+
+

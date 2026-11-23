@@ -17,6 +17,8 @@ from iq_files import (
     load_cs12, save_cs12,
     load_wav_iq, save_wav_iq,
     load_csv_iq, save_csv_iq,
+    load_cf64, save_cf64,
+    load_wav_mono, save_wav_mono,
 )
 
 class TestPythonIqFiles(unittest.TestCase):
@@ -112,6 +114,23 @@ class TestPythonIqFiles(unittest.TestCase):
         save_csv_iq(fname, self.test_signal)
         loaded = load_csv_iq(fname)
         np.testing.assert_allclose(loaded, self.test_signal, atol=0.0002)
+
+    def test_cf64(self):
+        fname = "tmp_cf64.iq"
+        self.tmp_files.append(fname)
+        save_cf64(fname, self.test_signal)
+        loaded = load_cf64(fname)
+        np.testing.assert_allclose(loaded, self.test_signal, atol=1e-12)
+
+    def test_wav_mono(self):
+        fname = "tmp_mono.wav"
+        self.tmp_files.append(fname)
+        save_wav_mono(fname, self.test_signal, 48000)
+        loaded, fs = load_wav_mono(fname)
+        self.assertEqual(fs, 48000)
+        np.testing.assert_allclose(loaded.real, self.test_signal.real, atol=0.0002)
+        np.testing.assert_allclose(loaded.imag, np.zeros_like(loaded.imag))
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -7,7 +7,7 @@
 //!   - Archivo de metadatos JSON: `<nombre>.sigmf-meta` conteniendo `global` (`core:datatype`, `core:sample_rate`, `core:version`) y `captures` (`core:sample_start`, `core:frequency`, `core:datetime`).
 
 use std::fs::File;
-use std::io::{Read, Write};
+use std::io::Read;
 use std::path::Path;
 
 /// Lee el par SigMF (.sigmf-data y .sigmf-meta si existe) dado el path a cualquiera de los dos o el base.
@@ -56,53 +56,8 @@ pub fn load_sigmf_from_file(data_path: &Path) -> Result<(Vec<(f32, f32)>, u32), 
     Ok((samples, sample_rate))
 }
 
-/// Guarda un par SigMF (.sigmf-data binario cf32_le y .sigmf-meta JSON).
-pub fn save_sigmf_to_file(
-    data_path: &Path,
-    samples: &[(f32, f32)],
-    sample_rate: u32,
-    center_frequency_hz: Option<f64>,
-) -> Result<(), Box<dyn std::error::Error>> {
-    let actual_data_path = if data_path.extension().and_then(|e| e.to_str()) == Some("sigmf-meta") {
-        data_path.with_extension("sigmf-data")
-    } else {
-        data_path.to_path_buf()
-    };
-    let meta_path = actual_data_path.with_extension("sigmf-meta");
-
-    // 1. Escribir .sigmf-data (cf32_le)
-    let mut bytes = Vec::with_capacity(samples.len() * 8);
-    for &(i, q) in samples {
-        bytes.extend_from_slice(&i.to_le_bytes());
-        bytes.extend_from_slice(&q.to_le_bytes());
-    }
-    let mut data_file = File::create(&actual_data_path)?;
-    data_file.write_all(&bytes)?;
-
-    // 2. Escribir .sigmf-meta JSON
-    let freq = center_frequency_hz.unwrap_or(433_920_000.0);
-    let meta_json = format!(
-        r#"{{
-    "global": {{
-        "core:datatype": "cf32_le",
-        "core:sample_rate": {},
-        "core:version": "1.0.0",
-        "core:description": "Generado por Signals SDR / iq-files",
-        "core:recorder": "Signals SDR"
-    }},
-    "captures": [
-        {{
-            "core:sample_start": 0,
-            "core:frequency": {}
-        }}
-    ],
-    "annotations": []
-}}"#,
-        sample_rate, freq
-    );
-
-    let mut meta_file = File::create(&meta_path)?;
-    meta_file.write_all(meta_json.as_bytes())?;
-
-    Ok(())
+pub fn load_sigmf(data_path: &Path) -> Result<(Vec<(f32, f32)>, u32), Box<dyn std::error::Error>> {
+    load_sigmf_from_file(data_path)
 }
+
+

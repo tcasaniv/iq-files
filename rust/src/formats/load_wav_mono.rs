@@ -25,3 +25,9 @@ pub fn load_wav_mono_from_memory(bytes: &[u8]) -> Result<(Vec<(f32, f32)>, u32),
     }
     Ok((samples, sample_rate))
 }
+
+/// Alias explícito para lectura desde archivo en disco.
+pub fn load_wav_mono_from_file(path: &Path) -> Result<(Vec<(f32, f32)>, u32), Box<dyn std::error::Error>> {
+    load_wav_mono(path)
+}
+

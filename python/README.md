@@ -39,6 +39,8 @@ Si no deseas instalar ningún paquete y solo necesitas dar soporte a un formato 
 | **RTL-SDR CU8 (uint8)** | `load_cu8.py` | `save_cu8.py` | RTL-SDR (`rtl_sdr`, `rtl_tcp`) unsigned 8-bit |
 | **LimeSDR / bladeRF CS12** | `load_cs12.py` | `save_cs12.py` | LimeSDR, bladeRF 12-bit packed (3 bytes/muestra) |
 | **WAV I/Q Estéreo 16-bit** | `load_wav_iq.py` | `save_wav_iq.py` | SDR#, SDR++, HDSDR, Audacity |
+| **WAV Audio Mono 16-bit** | `load_wav_mono.py` | `save_wav_mono.py` | Grabaciones mono, subportadoras de audio |
+| **RAW Float64 (Double)** | `load_cf64.py` | `save_cf64.py` | DSP científico, NumPy complex128 |
 | **CSV Texto Plano I/Q** | `load_csv_iq.py` | `save_csv_iq.py` | Hojas de cálculo, MATLAB, depuración visual |
 
 ---
@@ -81,6 +83,14 @@ samples = load_cu8("rtl_capture.cu8")
 # Guardar en formato bladeRF
 save_sc16q11("bladerf_out.bin", samples)
 ```
+
+---
+
+## Carpeta de Ejemplos
+
+Encuentra scripts interactivos y listos para ejecutar en la carpeta [`examples/`](examples/):
+- `examples/quickstart.py`: Guía de inicio rápido utilizando el paquete instalado (`pip install iq-files`) con síntesis y conversión entre múltiples formatos.
+- `examples/standalone_demo.py`: Demostración del uso de los archivos individuales autocontenidos en `standalone/`.
 
 ---
 

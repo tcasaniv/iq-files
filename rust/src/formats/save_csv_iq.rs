@@ -10,6 +10,12 @@ pub fn save_csv_iq(path: &Path, samples: &[(f32, f32)]) -> IoResult<()> {
     Ok(())
 }
 
+/// Alias explícito para guardado a archivo en disco.
+pub fn save_csv_iq_to_file(path: &Path, samples: &[(f32, f32)]) -> IoResult<()> {
+    save_csv_iq(path, samples)
+}
+
+
 /// Codifica muestras complejas I/Q en un string en formato CSV.
 pub fn save_csv_iq_to_string(samples: &[(f32, f32)]) -> String {
     let mut out = String::with_capacity(samples.len() * 24);

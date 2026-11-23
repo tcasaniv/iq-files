@@ -22,3 +22,9 @@ pub fn save_int8_to_memory(samples: &[(f32, f32)]) -> Vec<u8> {
     }
     buf
 }
+
+/// Alias explícito para guardado a archivo en disco.
+pub fn save_int8_to_file(path: &Path, samples: &[(f32, f32)]) -> IoResult<()> {
+    save_int8(path, samples)
+}
+

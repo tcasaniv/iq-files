@@ -6,7 +6,7 @@
 //! - **Bytes por muestra**: 4 bytes (2 bytes I, 2 bytes Q, Little-Endian).
 
 use std::fs::File;
-use std::io::{Read, Write};
+use std::io::Read;
 use std::path::Path;
 
 /// Lee muestras I/Q en formato RAW CU16 (uint16 LE con cero en 32768) desde memoria.
@@ -31,22 +31,8 @@ pub fn load_cu16_from_file(path: &Path) -> Result<Vec<(f32, f32)>, std::io::Erro
     Ok(load_cu16_from_memory(&bytes))
 }
 
-/// Codifica muestras I/Q a RAW CU16 (uint16 LE con cero en 32768).
-pub fn save_cu16_to_memory(samples: &[(f32, f32)]) -> Vec<u8> {
-    let mut bytes = Vec::with_capacity(samples.len() * 4);
-    for &(i, q) in samples {
-        let i_u16 = ((i * 32768.0) + 32768.0).clamp(0.0, 65535.0) as u16;
-        let q_u16 = ((q * 32768.0) + 32768.0).clamp(0.0, 65535.0) as u16;
-        bytes.extend_from_slice(&i_u16.to_le_bytes());
-        bytes.extend_from_slice(&q_u16.to_le_bytes());
-    }
-    bytes
+pub fn load_cu16(path: &Path) -> Result<Vec<(f32, f32)>, std::io::Error> {
+    load_cu16_from_file(path)
 }
 
-/// Guarda muestras I/Q en formato RAW CU16 a un archivo.
-pub fn save_cu16_to_file(path: &Path, samples: &[(f32, f32)]) -> Result<(), std::io::Error> {
-    let bytes = save_cu16_to_memory(samples);
-    let mut file = File::create(path)?;
-    file.write_all(&bytes)?;
-    Ok(())
-}
+

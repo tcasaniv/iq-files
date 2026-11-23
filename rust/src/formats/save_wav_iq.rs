@@ -33,3 +33,9 @@ pub fn save_wav_iq_to_memory(samples: &[(f32, f32)], sample_rate: u32) -> Result
     }
     Ok(buf)
 }
+
+/// Alias explícito para guardado a archivo en disco.
+pub fn save_wav_iq_to_file(path: &Path, samples: &[(f32, f32)], sample_rate: u32) -> Result<(), Box<dyn std::error::Error>> {
+    save_wav_iq(path, samples, sample_rate)
+}
+

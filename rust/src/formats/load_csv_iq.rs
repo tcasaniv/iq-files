@@ -27,3 +27,9 @@ pub fn load_csv_iq_from_str(text: &str) -> Vec<(f32, f32)> {
     }
     samples
 }
+
+/// Alias explícito para lectura desde archivo en disco.
+pub fn load_csv_iq_from_file(path: &Path) -> IoResult<Vec<(f32, f32)>> {
+    load_csv_iq(path)
+}
+

@@ -15,6 +15,8 @@ function [varargout] = iq_files(action, filename, varargin)
 %     'grcomplex' - GNU Radio complex float32
 %     'float32'   - Alias de grcomplex
 %     'int8'      - HackRF / RTL-SDR signed 8-bit
+%     'cu8'       - RTL-SDR uint8 con cero en 127.5
+%     'cs12'      - LimeSDR / bladeRF 12-bit packed (3 bytes por par)
 %     'wav_iq'    - Archivo WAV I/Q estéreo (16 bits)
 %     'csv_iq'    - Texto plano CSV con columnas I, Q
 
@@ -44,6 +46,11 @@ function [varargout] = iq_files(action, filename, varargin)
                 ret = save_grcomplex(filename, signal);
             case 'int8'
                 ret = save_int8(filename, signal);
+            case 'cu8'
+                save_cu8(filename, signal);
+                ret = 1;
+            case 'cs12'
+                ret = save_cs12(filename, signal);
             case 'wav_iq'
                 ret = save_wav_iq(filename, signal, sample_rate);
             case 'csv_iq'
@@ -69,6 +76,12 @@ function [varargout] = iq_files(action, filename, varargin)
                 signal = load_grcomplex(filename);
             case 'int8'
                 signal = load_int8(filename);
+            case 'cu8'
+                signal = load_cu8(filename);
+                sample_rate = 2048000;
+            case 'cs12'
+                signal = load_cs12(filename);
+                sample_rate = 2000000;
             case 'wav_iq'
                 [signal, sample_rate] = load_wav_iq(filename);
             case 'csv_iq'
