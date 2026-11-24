@@ -35,7 +35,7 @@ class TestPythonIqFiles(unittest.TestCase):
                     pass
 
     def test_version_and_metadata(self):
-        self.assertEqual(iq_files.__version__, "0.1.0")
+        self.assertEqual(iq_files.__version__, "0.1.1")
         self.assertIn("read_iq", iq_files.__all__)
         self.assertIn("load_cu8", iq_files.__all__)
         self.assertIn("load_cs12", iq_files.__all__)

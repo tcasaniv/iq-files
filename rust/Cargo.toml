@@ -1,6 +1,6 @@
 [package]
 name = "iq-files"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["Terry Joel Casani Valencia"]
 description = "High-performance reading and writing of I/Q complex signal files in various SDR formats (SC16 Q11, SC16 Full, Float32, Int8, WAV, CSV)"

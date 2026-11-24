@@ -2,6 +2,14 @@
 
 Todos los cambios notables en este paquete serán documentados en este archivo.
 
+## [0.1.1] - 2026-11-23
+
+### Añadido
+- Formatos Float64 (`load_cf64`, `save_cf64`) y WAV Mono (`load_wav_mono`, `save_wav_mono`).
+- Carpeta de ejemplos dedicados `examples/` (`quickstart.py`, `standalone_demo.py`, `README.md`).
+- Soporte extendido en la API unificada `read_iq` / `write_iq` para `cf64` y `wav_mono`.
+- Copias independientes correspondientes en la carpeta `standalone/`.
+
 ## [0.1.0] - 2026-11-22
 
 ### Añadido

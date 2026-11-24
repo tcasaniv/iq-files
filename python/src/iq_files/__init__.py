@@ -23,7 +23,7 @@ from .save_cf64 import save_cf64
 from .load_wav_mono import load_wav_mono
 from .save_wav_mono import save_wav_mono
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 __author__ = "Terry Joel Casani Valencia"
 __license__ = "GPL-3.0-or-later"
 
